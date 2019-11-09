@@ -18,7 +18,7 @@ export const initialState: GameState = {
  * @param {initialState} state
  * @param {{type: String, payload: any}} action
  */
-const gameReducer = (
+export const gameReducer = (
   state = initialState,
   action: SetNumberOfPlayersAction,
 ) => {
@@ -37,11 +37,13 @@ export default gameReducer;
 
 /**
  * Selects game parte of the state
+ * @param state
  */
 export const getGameState = (state: any) => state.game;
 
 /**
  * Selects number of players part of state
+ * @param state
  */
 export const getNumberOfPlayers = createSelector(
   getGameState,

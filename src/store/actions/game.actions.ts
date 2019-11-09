@@ -6,7 +6,8 @@ export interface SetNumberOfPlayersAction {
 }
 
 /**
- * Creates an action that sets state with number of players
+ * Action for setting number of players
+ * @param payload
  */
 export const setNumberOfPlayers = (payload: number) => ({
   type: SET_NUMBERS_OF_PLAYERS,

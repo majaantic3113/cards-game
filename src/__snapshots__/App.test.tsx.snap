@@ -1,32 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test Layout component should render correctly 1`] = `
+exports[`Test App component should render correctly 1`] = `
 <div
-  class="App"
+  class="game"
 >
-  <header
-    class="App-header"
+  <h1>
+    Select number of players
+  </h1>
+  <button
+    class="button"
   >
-    <img
-      alt="logo"
-      class="App-logo"
-      src="logo.svg"
-    />
-    <p>
-      Edit 
-      <code>
-        src/App.tsx
-      </code>
-       and save to reload.
-    </p>
-    <a
-      class="App-link"
-      href="https://reactjs.org"
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      Learn React
-    </a>
-  </header>
+    2
+     players
+  </button>
+  <button
+    class="button"
+  >
+    3
+     players
+  </button>
+  <button
+    class="button"
+  >
+    4
+     players
+  </button>
+</div>
+`;
+
+exports[`Test App component should render correctly 2`] = `
+<div
+  class="game"
+>
+  llallala
 </div>
 `;

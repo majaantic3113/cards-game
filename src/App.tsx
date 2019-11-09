@@ -8,12 +8,9 @@ interface Props {
   numberOfPlayers?: number;
 }
 
-const App: React.FC<Props> = ({ numberOfPlayers }) => {
-  console.log(numberOfPlayers);
-  return (
-    <div className='game'>{numberOfPlayers ? 'llallala' : <GameIntro />}</div>
-  );
-};
+export const App: React.FC<Props> = ({ numberOfPlayers }) => (
+  <div className='game'>{numberOfPlayers ? 'llallala' : <GameIntro />}</div>
+);
 
 export const mapStateToProps = (state: any) => ({
   numberOfPlayers: getNumberOfPlayers(state),

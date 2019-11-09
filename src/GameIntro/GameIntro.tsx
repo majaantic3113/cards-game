@@ -7,7 +7,7 @@ interface Props {
   setNumberOfPlayers?: (num: number) => void;
 }
 
-const GameIntro: React.FC<Props> = ({ setNumberOfPlayers }) => {
+export const GameIntro: React.FC<Props> = ({ setNumberOfPlayers }) => {
   const POSSIBLE_NUMBERS: Array<number> = [2, 3, 4];
   return (
     <>

@@ -53,6 +53,11 @@
       "!**/serviceWorker.ts",
       "!**/index.tsx"
     ],
+    "coverageReporters": [
+      "html",
+      "lcov",
+      "text"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 60,
