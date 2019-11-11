@@ -5,6 +5,8 @@ import {
   FETCH_CARDS_START,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
+  THROW_CARD_PLAYER,
+  THROW_CARD_COMPUTER,
 } from '../actions/game.actions';
 
 interface GameState {
@@ -12,18 +14,39 @@ interface GameState {
   deck: any;
   loading: boolean;
   error: boolean;
-  playerCards: Array<any>;
+  players: any;
+  cardsOnTable: Array<any>;
+  moveInProgress: boolean;
 }
 export const initialState: GameState = {
   numberOfPlayers: 0,
   deck: null,
   loading: false,
   error: false,
-  playerCards: [],
+  players: {},
+  cardsOnTable: [],
+  moveInProgress: false,
 };
 
 const NUMBER_OF_CARDS_PER_PLAYER = 10;
 
+const CARD_VALUES = {
+  ACE: 1,
+  '2': 2,
+  '3': 3,
+  '4': 4,
+  '5': 5,
+  '6': 6,
+  '7': 7,
+  '8': 8,
+  '9': 9,
+  '10': 10,
+  JACK: 12,
+  QUEEN: 13,
+  KING: 14,
+};
+
+// helpers
 export const chunkArray = (myArray: any, chunk_size: number) => {
   const tempArray = [];
 
@@ -61,19 +84,67 @@ export const gameReducer = (state = initialState, action: any) => {
       );
 
       for (const index in cardsInChunks) {
-        playerCards[`player${+index + 1}`] = cardsInChunks[index];
+        playerCards[`player${+index + 1}`] = {
+          cards: cardsInChunks[index],
+          score: 0,
+        };
       }
 
       return {
         ...state,
         loading: false,
-        playerCards,
+        players: playerCards,
       };
     case FETCH_CARDS_ERROR:
       return {
         ...state,
         error: true,
         loading: false,
+      };
+    case THROW_CARD_COMPUTER:
+      const player = action.payload;
+
+      console.log(player);
+      const cardRandom =
+        state.players[player].cards[
+          Math.floor(Math.random() * state.players[player].cards.length)
+        ];
+
+      const updated = {
+        ...state.players[player],
+        cards: state.players[player].cards.filter((card: any) => {
+          return card.code !== cardRandom.code;
+        }),
+      };
+
+      console.log(updated, 'lalal');
+
+      return {
+        ...state,
+        cardsOnTable: [
+          ...state.cardsOnTable,
+          { user: player, card: cardRandom },
+        ],
+        players: { ...state.players, [player]: updated },
+        moveInProgress: true,
+      };
+
+    case THROW_CARD_PLAYER:
+      const playerOnMove = action.payload.user;
+      const cardThrown = action.payload.card;
+
+      const updatedPlayer = {
+        ...state.players[playerOnMove],
+        cards: state.players[playerOnMove].cards.filter((card: any) => {
+          return card.code !== cardThrown.code;
+        }),
+      };
+
+      return {
+        ...state,
+        cardsOnTable: [...state.cardsOnTable, action.payload],
+        players: { ...state.players, [playerOnMove]: updatedPlayer },
+        moveInProgress: true,
       };
     default:
       return state;
@@ -104,4 +175,31 @@ export const getNumberOfPlayers = createSelector(
 export const getLoadingState = createSelector(
   getGameState,
   gameState => gameState.loading,
+);
+
+/**
+ * Selects loading part of state
+ * @param state
+ */
+export const getUserPlayerCards = createSelector(
+  getGameState,
+  gameState => gameState.players['player1'],
+);
+
+/**
+ * Selects cardsOnTable part of state
+ * @param state
+ */
+export const getCardsOnTable = createSelector(
+  getGameState,
+  gameState => gameState.cardsOnTable,
+);
+
+/**
+ * Selects moveInProgress part of state
+ * @param state
+ */
+export const getMoveInProgress = createSelector(
+  getGameState,
+  gameState => gameState.moveInProgress,
 );
