@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const App: React.FC<Props> = ({ numberOfPlayers }) => (
-  <div className='game'>{numberOfPlayers ? 'llallala' : <GameIntro />}</div>
+  <div className="game">{numberOfPlayers ? 'llallala' : <GameIntro />}</div>
 );
 
 export const mapStateToProps = (state: any) => ({

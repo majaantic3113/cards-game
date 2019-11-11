@@ -15,7 +15,7 @@ export const GameIntro: React.FC<Props> = ({ setNumberOfPlayers }) => {
       {POSSIBLE_NUMBERS.map((elem, index) => (
         <button
           key={index}
-          className='button'
+          className="button"
           onClick={() => setNumberOfPlayers && setNumberOfPlayers(elem)}
         >
           {elem} players
@@ -25,14 +25,9 @@ export const GameIntro: React.FC<Props> = ({ setNumberOfPlayers }) => {
   );
 };
 
-export const mapDispatchToProps = (dispatch: any) => {
-  return {
-    setNumberOfPlayers: (numberOfPlayers: number) =>
-      dispatch(setNumberOfPlayers(numberOfPlayers)),
-  };
-};
+export const mapDispatchToProps = (dispatch: any) => ({
+  setNumberOfPlayers: (numberOfPlayers: number) =>
+    dispatch(setNumberOfPlayers(numberOfPlayers)),
+});
 
-export default connect(
-  undefined,
-  mapDispatchToProps,
-)(GameIntro);
+export default connect(undefined, mapDispatchToProps)(GameIntro);
