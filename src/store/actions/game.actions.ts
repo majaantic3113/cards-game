@@ -7,11 +7,12 @@ export const FETCH_CARDS_ERROR = '[CARDS] Fetch CARDS error';
 export const THROW_CARD_COMPUTER = '[Cards] Throw card computer';
 // player action
 export const THROW_CARD_PLAYER = '[THROW CARD PLAYER] Throw card player';
+export const FIND_ROUND_WINNER = '[ROUND END] Find round winner';
 
 /**
  * Returns an action for fetching CARDS
  */
-export const fetchCardsStart = () => ({ type: FETCH_CARDS_START });
+const fetchCardsStart = () => ({ type: FETCH_CARDS_START });
 
 /**
  * Returns an action with CARDS data
@@ -41,7 +42,6 @@ export interface SetNumberOfPlayersAction {
  */
 export const fetchCards = (numberOfPlayers: number) => {
   return async (dispatch: any) => {
-    console.log('uslo u fetch cards', dispatch);
     try {
       dispatch(fetchCardsStart());
 
@@ -72,15 +72,23 @@ export const setNumberOfPlayers = (payload: number) => ({
   payload,
 });
 
-export const throwCards = (userMove: any) => {
-  console.log('uslo u thorw/cards', userMove);
-  return (dispatch: any) => {
-    console.log('uslo u dispath', dispatch);
+export const throwCards = (userMove: any, numberOfPlayers: number) => {
+  return async (dispatch: any) => {
     dispatch(throwCardPlayer(userMove));
 
-    setTimeout(() => {
-      dispatch(throwCardComputer('player2'));
-    }, 500);
+    const throwCardsSimulation = () => {
+      return new Promise(resolve => {
+        for (let index = 1; index < numberOfPlayers; index++) {
+          setTimeout(() => {
+            dispatch(throwCardComputer(`player${index + 1}`));
+          }, 500 * index);
+        }
+        setTimeout(resolve, 500 * numberOfPlayers);
+      });
+    };
+
+    await throwCardsSimulation();
+    dispatch(findRoundWinner());
   };
 };
 
@@ -99,5 +107,15 @@ export const throwCardPlayer = (payload: { user: string; card: any }) => {
   return {
     type: THROW_CARD_PLAYER,
     payload,
+  };
+};
+
+/**
+ * Action for deciding on round winner
+ * @param payload
+ */
+export const findRoundWinner = () => {
+  return {
+    type: FIND_ROUND_WINNER,
   };
 };

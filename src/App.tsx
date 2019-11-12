@@ -17,7 +17,6 @@ interface Props {
 }
 
 export const App: React.FC<Props> = ({ numberOfPlayers, loading, state }) => {
-  console.log(state, 'appppp');
   return (
     <div className="game">
       {numberOfPlayers ? (

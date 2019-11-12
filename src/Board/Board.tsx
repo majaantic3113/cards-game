@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 
 import { getCardsOnTable } from '../store/reducers/game.reducer';
 
-const Board = (props: any) => {
-  console.log(props);
+const Board = ({ cardsOnTable }: any) => {
   return (
     <div>
-      {props.cardsOnTable.map((card: any) => {
+      {cardsOnTable.map((card: any) => {
         return <img src={card.card.image} alt={card.card.code}></img>;
       })}
     </div>

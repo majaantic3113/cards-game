@@ -7,6 +7,7 @@ import {
   FETCH_CARDS_ERROR,
   THROW_CARD_PLAYER,
   THROW_CARD_COMPUTER,
+  FIND_ROUND_WINNER,
 } from '../actions/game.actions';
 
 interface GameState {
@@ -30,7 +31,7 @@ export const initialState: GameState = {
 
 const NUMBER_OF_CARDS_PER_PLAYER = 10;
 
-const CARD_VALUES = {
+const CARD_VALUES: any = {
   ACE: 1,
   '2': 2,
   '3': 3,
@@ -104,7 +105,6 @@ export const gameReducer = (state = initialState, action: any) => {
     case THROW_CARD_COMPUTER:
       const player = action.payload;
 
-      console.log(player);
       const cardRandom =
         state.players[player].cards[
           Math.floor(Math.random() * state.players[player].cards.length)
@@ -116,8 +116,6 @@ export const gameReducer = (state = initialState, action: any) => {
           return card.code !== cardRandom.code;
         }),
       };
-
-      console.log(updated, 'lalal');
 
       return {
         ...state,
@@ -146,6 +144,17 @@ export const gameReducer = (state = initialState, action: any) => {
         players: { ...state.players, [playerOnMove]: updatedPlayer },
         moveInProgress: true,
       };
+    case FIND_ROUND_WINNER:
+      const mappedCards = state.cardsOnTable
+        .map((card: any) => {
+          const points = CARD_VALUES[card.card.value];
+          card.points = points;
+          return card;
+        })
+        .sort((a, b) => b.points - a.points);
+
+      console.log(mappedCards);
+
     default:
       return state;
   }
