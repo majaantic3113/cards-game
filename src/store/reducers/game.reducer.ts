@@ -58,6 +58,26 @@ export const chunkArray = (myArray: any, chunk_size: number) => {
   return tempArray;
 };
 
+export const findGreatestCard = (cards: any) => {
+  let max = cards[0];
+
+  const checkPlayers = (element: any, max: any) => {
+    const elemUser = element.user;
+    const maxUser = max.user;
+
+    return +elemUser.substr(-1) > +maxUser.substr(-1) ? element : max;
+  }
+
+  cards.forEach((element: any) => {
+    const currCardValue = CARD_VALUES[element.card.value];
+
+    currCardValue > CARD_VALUES[max.card.value] && (max = element);
+    currCardValue === CARD_VALUES[max.card.value] && (max = checkPlayers(element, max));
+  });
+
+  console.log('max', max);
+}
+
 /**
  * Creates new game state
  *
@@ -107,7 +127,7 @@ export const gameReducer = (state = initialState, action: any) => {
 
       const cardRandom =
         state.players[player].cards[
-          Math.floor(Math.random() * state.players[player].cards.length)
+        Math.floor(Math.random() * state.players[player].cards.length)
         ];
 
       const updated = {
@@ -145,15 +165,7 @@ export const gameReducer = (state = initialState, action: any) => {
         moveInProgress: true,
       };
     case FIND_ROUND_WINNER:
-      const mappedCards = state.cardsOnTable
-        .map((card: any) => {
-          const points = CARD_VALUES[card.card.value];
-          card.points = points;
-          return card;
-        })
-        .sort((a, b) => b.points - a.points);
-
-      console.log(mappedCards);
+      findGreatestCard(state.cardsOnTable);
 
     default:
       return state;
